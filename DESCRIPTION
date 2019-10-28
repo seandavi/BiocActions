@@ -12,3 +12,5 @@ Description: Currently, this package is a container for community-maintained Git
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+URL: https://github.com/seandavi/BiocActions
+RoxygenNote: 6.1.1
