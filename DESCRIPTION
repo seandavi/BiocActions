@@ -1,13 +1,14 @@
 Package: BiocActions
-Title: What the Package Does (One Line, Title Case)
+Title: A collection of GitHub actions and code for Bioconductor Development
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Sean",
+           family = "Davis",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "seandavi@gmail.com",
+           comment = c(ORCID = "0000-0002-8991-6458"))
+Description: Currently, this package is a container for community-maintained GitHub Actions
+  that can be included directly in GitHub workflows.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
