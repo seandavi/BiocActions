@@ -4,6 +4,22 @@ Develop and host GitHub actions for Bioconductor
 
 # Contributions
 
+## Add a new action
+
+### By pull request
+New actions can be added to `inst/name-of-action/` in this package.
+
+All new actions should contain at least:
+
+- `README.md` (required, including documentation of inputs and outputs)
+- `Dockerfile` (if the action is container-based)
+- `action.yml` (must have that name)
+
+### By suggesting a new action
+
+Someone else must implement actions suggested by issue. Therefore, 
+these are best considered suggestions and not really direct requests.
+
 - [Create an issue proposing a new action](https://github.com/seandavi/BiocActions/issues/new?template=new_action)
 
 # Usage
