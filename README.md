@@ -35,9 +35,6 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
-    # To use this repository's private action, you must check out the repository
-    - name: Checkout
-      uses: actions/checkout@v1
     - name: Hello world action step
       id: hello
       uses: seandavi/BiocActions/inst/actions/hello-world-docker-action@master
