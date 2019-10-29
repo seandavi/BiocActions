@@ -7,7 +7,7 @@ Develop and host GitHub actions for Bioconductor
 ## Add a new action
 
 ### By pull request
-New actions can be added to `inst/name-of-action/` in this package.
+New actions can be added to `inst/actions/name-of-action/` in this package.
 
 All new actions should contain at least:
 
