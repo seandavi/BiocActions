@@ -1,0 +1,30 @@
+
+name: CICD
+
+'on':
+  - push
+  - pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    container:
+      image: bioconductor/bioconductor_full:devel
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@master
+      - name: Install Package Dependencies
+        run: |-
+          Rscript -e "BiocManager::install('remotes', 'rcmdcheck', 'covr')"
+          Rscript -e "remotes::install_deps(dependencies = TRUE)"
+      - name: Check Package
+        run: Rscript -e "rcmdcheck::rcmdcheck(error_on = 'error', check_dir = 'check')"
+      - name: Document Package
+        run: |
+          Rscript -e "pkgdown::build_site()"
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/master'
+        uses: maxheld83/ghpages@v0.2.0
+        env:
+          BUILD_DIR: docs
+          GH_PAT: ${{ secrets.GH_PAT }}
