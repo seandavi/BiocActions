@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@master
       - name: Install Package Dependencies
         run: |
-          Rscript -e "BiocManager::install(c('remotes', 'rcmdcheck', 'covr'))"
+          Rscript -e "BiocManager::install(c('remotes', 'rcmdcheck', 'covr', 'pkgdown'))"
           Rscript -e "remotes::install_deps(dependencies = TRUE)"
       - name: System dependencies
         run: |
