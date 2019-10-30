@@ -21,6 +21,7 @@ jobs:
         run: |
           sudo apt-get update && apt-get install -y --no-install-recommends \
           texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
+          pip install ghp-import
       - name: Check Package
         run: Rscript -e "rcmdcheck::rcmdcheck(error_on = 'error', check_dir = 'check')"
       - name: Document Package
@@ -28,7 +29,6 @@ jobs:
           Rscript -e "pkgdown::build_site()"
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/master'
-        uses: maxheld83/ghpages@v0.2.0
-        env:
-          BUILD_DIR: docs
-          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          ghp-import -n docs && \
+          git push -qf https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git gh-pages
