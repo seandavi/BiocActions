@@ -1,16 +1,31 @@
 Package: BiocActions
 Title: A collection of GitHub actions and code for Bioconductor Development
-Version: 0.0.0.9000
-Authors@R: 
-    person(given = "Sean",
-           family = "Davis",
-           role = c("aut", "cre"),
-           email = "seandavi@gmail.com",
-           comment = c(ORCID = "0000-0002-8991-6458"))
+Version: 0.1.0
+Date: 2019-10-30
+Authors@R: c(
+               person(given = "Vince",
+                      family = "Carey",
+                      role = c("aut"),
+                      email = "stvjc@channing.harvard.edu "),
+               person(given = "Lorena",
+                      family = "Pantano",
+                      role = c("aut"),
+                      email = "lpantano@iscb.org"),
+               person(given = "Sean",
+                      family = "Davis",
+                      role = c("aut", "cre"),
+                      email = "seandavi@gmail.com",
+                      comment = c(ORCID = "0000-0002-8991-6458"))
+           )
 Description: Currently, this package is a container for community-maintained GitHub Actions
   that can be included directly in GitHub workflows.
 License: MIT + file LICENSE
+Suggests: pkgdown,
+  knitr,
+  rmarkdown,
+  revealjs
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/seandavi/BiocActions
 RoxygenNote: 6.1.1
+VignetteBuilder: knitr

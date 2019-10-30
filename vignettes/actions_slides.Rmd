@@ -1,0 +1,208 @@
+---
+title: "GitHub Actions Automate the Software Package Development Workflow"
+author: |
+  <br />
+  Sean Davis, MD, PhD
+date: October 30, 2019
+output:
+  revealjs::revealjs_presentation:
+    self_contained: false
+    theme: black
+    transition: zoom
+    highlight: espresso
+    reveal_plugins: ["notes", "zoom"]
+vignette: >
+  %\VignetteIndexEntry{GitHub Actions Automate the Software Package Development Workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(BiocActions)
+```
+
+# Bioconductor Workshop package automation
+
+The use case....
+
+
+
+## Multiple delivery targets for each workshop
+
+- Docker container with all installed packages (or for each workshop
+  independently).
+- Website for each workshop
+- Binary and source package tarballs for each workshop
+
+## Broader goals align with developer interests
+
+- Provide developers with access to a build environment as close to
+  Bioconductor build environment as possible.
+- Promote automated continuous integration and delivery (CI/CD) without
+  building extensive infrastructure.
+- Encourage sharing CI/CD best practices through code and documentation.
+- Facilitate build pipelines that are reproducible, testable, and
+  deliver all required build artifacts.
+
+
+
+<aside class="notes">
+	Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit »S« on your keyboard).
+</aside>
+
+# Understanding GitHub Actions
+
+## Actions
+
+Actions are not useful by themselves. They are combined into workflows
+which are then run.
+
+Actions come in two flavors:
+
+- Containerized
+- Javascript
+
+## File layout for an `Action` directory
+
+```sh
+.
+└── hello-world-docker-action
+    ├── Dockerfile
+    ├── README.md
+    ├── action.yml
+    └── entrypoint.sh
+```
+
+Translated into an R package `inst` directory, for example.
+
+```sh
+inst
+└── actions
+    └── hello-world-docker-action
+        ├── Dockerfile
+        ├── README.md
+        ├── action.yml
+        └── entrypoint.sh
+```
+
+## A Dockerfile for containerized builds
+
+```sh
+# Container image that runs your code
+FROM alpine:3.10
+
+# Copies your code file from your action
+#  repository to the filesystem path `/` of the container
+COPY entrypoint.sh /entrypoint.sh
+
+# Code file to execute when the
+#  docker container starts up (`entrypoint.sh`)
+ENTRYPOINT ["/entrypoint.sh"]
+```
+
+## Running a script inside docker
+
+The `entrypoint.sh` file:
+
+```sh
+#!/bin/sh -l
+
+echo "Hello $1"
+time=$(date)
+#
+# set output--idiomatic to github actions
+# 
+echo ::set-output name=time::$time
+```
+
+- Inputs are handled in the usual "linux/unix" way. 
+- Outputs represent variables that can be accessed by
+  other steps in the workflow.
+
+
+
+## Example action
+
+```yaml
+# action.yml
+name: 'Hello World'
+description: 'Greet someone and record the time'
+inputs:
+  who-to-greet:  # id of input
+    description: 'Who to greet'
+    required: true
+    default: 'World'
+outputs:
+  time: # id of output
+    description: 'The time we greeted you'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.who-to-greet }}
+```
+
+## Example action
+
+
+- Ordered set of actions
+
+# A GitHub Action from the ground up
+
+# Building a GitHub workflow
+
+# Actions for our use case
+
+Focus on linux that can run inside bioconductor_full docker container.
+
+1. checkout
+2. `R CMD CHECK`
+3. `R CMD BUILD` (source)
+4. `R CMD BUILD` (binary on linux)
+5. `R CMD INSTALL` 
+6. `Rscript -e 'pkgdown::build_site'`
+7. Push to gh-pages
+8. Workshop-specific docker image
+9. Capture build artifacts
+
+## Checkout
+
+actions/checkout
+
+## Check package
+
+R CMD Check....
+
+## Build source package
+
+R CMD build
+
+## Build binary package
+ 
+R CMD build --binary
+
+## Install package
+
+```{sh eval=FALSE}
+R CMD INSTALL ${GITHUB_WORKSPACE} >& install.log
+```
+
+## Build pkgdown website
+
+pkgdown::build_site
+
+## Publish pkgdown website
+
+ghp-import? Need GH-secret
+
+## Save or deploy build artifacts
+
+Not sure....
+
