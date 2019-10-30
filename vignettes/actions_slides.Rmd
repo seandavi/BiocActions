@@ -7,7 +7,7 @@ date: October 30, 2019
 output:
   revealjs::revealjs_presentation:
     self_contained: false
-    theme: black
+    theme: sky
     transition: zoom
     highlight: espresso
     reveal_plugins: ["notes", "zoom"]
@@ -19,19 +19,22 @@ vignette: >
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
   comment = "#>"
 )
 ```
 
-```{r setup}
+```{r, setup}
 library(BiocActions)
+require(DiagrammeR)
 ```
 
 # Bioconductor Workshop package automation
 
-The use case....
+## Possible Workflow
 
+```{r, grviz, echo=FALSE, fig.cap = "Potential workflow for a single package"}
+DiagrammeR::grViz(diagram = 'bioc_example_workflow.dot')
+```
 
 
 ## Multiple delivery targets for each workshop
@@ -52,11 +55,6 @@ The use case....
   deliver all required build artifacts.
 
 
-
-<aside class="notes">
-	Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit »S« on your keyboard).
-</aside>
-
 # Understanding GitHub Actions
 
 ## Actions
@@ -71,7 +69,7 @@ Actions come in two flavors:
 
 ## File layout for an `Action` directory
 
-```sh
+```{sh eval=FALSE}
 .
 └── hello-world-docker-action
     ├── Dockerfile
@@ -82,7 +80,7 @@ Actions come in two flavors:
 
 Translated into an R package `inst` directory, for example.
 
-```sh
+```{sh eval=FALSE}
 inst
 └── actions
     └── hello-world-docker-action
@@ -149,15 +147,6 @@ runs:
     - ${{ inputs.who-to-greet }}
 ```
 
-## Example action
-
-
-- Ordered set of actions
-
-# A GitHub Action from the ground up
-
-# Building a GitHub workflow
-
 # Actions for our use case
 
 Focus on linux that can run inside bioconductor_full docker container.
@@ -198,11 +187,46 @@ R CMD INSTALL ${GITHUB_WORKSPACE} >& install.log
 
 pkgdown::build_site
 
-## Publish pkgdown website
+## Full example
 
-ghp-import? Need GH-secret
+```{sh eval=FALSE}
+name: CICD
 
-## Save or deploy build artifacts
+'on':
+  - push
+  - pull_request
 
-Not sure....
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    container:
+      image: bioconductor/bioconductor_full:devel
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@master
+      - name: Install Package Dependencies
+        run: |
+          Rscript -e "BiocManager::install(c('remotes', 'rcmdcheck', 'covr', 'pkgdown'))"
+          Rscript -e "remotes::install_deps(dependencies = TRUE)"
+      - name: System dependencies
+        run: |
+          sudo apt-get update && apt-get install -y --no-install-recommends \
+          texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
+          pip install ghp-import
+      - name: Check Package
+        run: Rscript -e "rcmdcheck::rcmdcheck(error_on = 'error', check_dir = 'check')"
+      - name: Document Package
+        run: |
+          Rscript -e "pkgdown::build_site()"
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/master'
+        run: |
+          ghp-import -n docs && \
+          git push -qf https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git gh-pages
+```
+
+## BiocActions
+
+- https://github.com/seandavi/BiocActions
+
 

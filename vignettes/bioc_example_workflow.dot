@@ -1,0 +1,20 @@
+digraph boxes_and_circles {
+
+  # a 'graph' statement
+  graph [overlap = true, fontsize = 10]
+
+  # several 'node' statements
+  node [shape = box,
+        fontname = Helvetica]
+  
+  Checkout -> Build -> Check -> Install
+  Checkout -> BuildBinary
+
+  Check -> Log
+  Build -> Log
+  Install -> Log
+  BuildBinary -> CaptureOutput
+  Build -> Documentation -> CaptureOutput
+  Documentation -> WorkshopSite -> Deploy
+  Log -> CaptureOutput
+}
