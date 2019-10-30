@@ -14,9 +14,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@master
       - name: Install Package Dependencies
-        run: |-
+        run: |
           Rscript -e "BiocManager::install(c('remotes', 'rcmdcheck', 'covr'))"
           Rscript -e "remotes::install_deps(dependencies = TRUE)"
+      - name: System dependencies
+        run: |
+          sudo apt-get update && apt-get install -y --no-install-recommends texlive-full
       - name: Check Package
         run: Rscript -e "rcmdcheck::rcmdcheck(error_on = 'error', check_dir = 'check')"
       - name: Document Package
