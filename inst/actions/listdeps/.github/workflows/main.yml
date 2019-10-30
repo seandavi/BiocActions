@@ -1,0 +1,24 @@
+name: listdeps
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: testdocker
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: testROC
+      id: testROC  
+      uses: vjcitn/listdeps@master
+      with: 
+        pkg-to-get-deps: 'DESeq2'
+#    - name: getlist
+#      run: echo "got ${{ steps.testROC.deps }}"
+    - name: getjson
+      uses: actions/upload-artifact@v1
+      with:
+        name: get_deps
+        path: deps.json
+ 

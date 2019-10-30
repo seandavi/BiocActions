@@ -1,0 +1,16 @@
+# action.yml
+name: 'listdeps'
+description: 'use BiocPkgTools to list dependencies of a given package'
+inputs:
+  pkg-to-get-deps:  # id of input
+    description: 'name of a package'
+    required: true
+    default: 'Biobase'
+outputs:
+  deps: # id of output
+    description: 'vector of packages depending on input'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.pkg-to-get-deps }}
