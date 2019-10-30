@@ -6,6 +6,8 @@ Develop and host GitHub actions for Bioconductor
 
 ## Add a new action
 
+Note that using actions in this package is addressed below in the Usage section
+
 ### By pull request
 New actions can be added to `inst/actions/name-of-action/` in this package.
 
@@ -24,7 +26,7 @@ these are best considered suggestions and not really direct requests.
 
 # Usage
 
-To use one of the BiocActions in your own workflow, 
+To use one or more of the BiocActions *in your own package*, 
 create a workflow file that looks something like this. 
 
 ```yaml
@@ -45,6 +47,6 @@ jobs:
       run: echo "The time was ${{ steps.hello.outputs.time }}"
 ```
 
-As a reminder, workflows are always placed in 
+As a reminder, *in your own package* workflows are always placed in 
 `.github/workflows/workflow_name.yml`. An example 
-repository that uses this idea is [here](https://github.com/seandavi/example_BiocActions_package/blob/master/.github/workflows/main.yml).
+repository that uses this idea is [here](https://github.com/seandavi/example_BiocActions_package/blob/master/.github/workflows/main.yml). 
