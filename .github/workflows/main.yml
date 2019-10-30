@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@master
       - name: Install Package Dependencies
         run: |-
-          Rscript -e "BiocManager::install('remotes', 'rcmdcheck', 'covr')"
+          Rscript -e "BiocManager::install(c('remotes', 'rcmdcheck', 'covr'))"
           Rscript -e "remotes::install_deps(dependencies = TRUE)"
       - name: Check Package
         run: Rscript -e "rcmdcheck::rcmdcheck(error_on = 'error', check_dir = 'check')"
