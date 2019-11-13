@@ -28,7 +28,7 @@ jobs:
         run: |
           Rscript -e "pkgdown::build_site()"
       - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/master'
+        #if: github.ref == 'refs/heads/master'
         run: |
           ghp-import -n docs && \
           git push -qf https://${GITHUB_PAT}@github.com/${GITHUB_REPOSITORY}.git gh-pages
