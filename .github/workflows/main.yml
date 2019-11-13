@@ -36,6 +36,8 @@ jobs:
           FOLDER: docs # The folder the action should deploy.
           BUILD_SCRIPT: echo 'pushing'
       - name: Deploy to GitHub Pages
+        env:
+          ACCESS_TOKEN: ${{ secrets.GITHUB_PAT }}
         run: |
           ghp-import -n docs && \
-          git push -qf https://${{ secrets.GITHUB_PAT }}@github.com/${GITHUB_REPOSITORY}.git gh-pages
+          git push -qf https://seandavi:${ACCESS_TOKEN}@github.com/${GITHUB_REPOSITORY}.git gh-pages
