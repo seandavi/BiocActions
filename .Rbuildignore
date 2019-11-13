@@ -7,3 +7,6 @@
 ^\.Rproj\.user$
 ^doc$
 ^Meta$
+.*_files
+.*_cache
+\.nojekyll
