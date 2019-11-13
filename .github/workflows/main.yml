@@ -31,4 +31,4 @@ jobs:
         if: github.ref == 'refs/heads/master'
         run: |
           ghp-import -n docs && \
-          git push -qf https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git gh-pages
+          git push -qf https://${GITHUB_PAT}@github.com/${GITHUB_REPOSITORY}.git gh-pages
