@@ -1,27 +1,23 @@
-# biocIBC
-
-exploring actions-based CI to **i**nstall, **b**uild and **c**heck a Bioconductor package, based on a Docker container with R and limited
-CRAN/Bioc provisioning
-
 # biocIBC: a preliminary approach to install/build/check of a Bioconductor package in ubuntu-18.04
 
-Artifacts are produced including 
+Artifacts are produced including logs for install and check, and a tarball of the source package, and a .tgz image of the binary installation for the runtime used.
 
 ## Inputs
 
-### pkg-to-get-deps
+### pkgname
 
-**Required** The name of the person to greet. Default `'Biobase'`.
+**Required** The name of the package to process.  Default: ROC
+
+### container
+
+**Required** Must provide R runtime.  Default: bioconductor/bioconductor_full:devel
+
+### ystbsll
+
+**Required** Until better introspection is available, `[pkgname]_[version tag].tar.gz` must be supplied; default, which may become stale if it does not agree with the checked out source.  Default: ROC_1.63.0.tar.gz
 
 ## Outputs
 
-### `deps`
+There are no outputs per se.  Artifacts are produced: install log, check log, source .tar.gz, binary .tgz with a platform tag intercalated in the filename.
 
-A JSON string providing information on the Bioconductor version in use,
-the query package, and the declared dependencies of that package
-
-## Example usage
-```
-uses: actions/listdeps@v1
-with:
-  pkg-to-get-deps: 'ROC'
+TO DO: Run for a matrix of environments (various flavors of linux), create the full library of dependencies, which are available in the install step when it succeeds.
