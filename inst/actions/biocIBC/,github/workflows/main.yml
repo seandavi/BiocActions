@@ -1,0 +1,58 @@
+# demonstration of log and tarball generation -- you must supply full
+# tarball name at the end because of difficulties creating/passing env vars
+name: biocIBC_DESeq2
+env:
+  PACKAGE_NAME: DESeq2
+  VERSION_TAG: 1.27.13
+  TARBALL: DESeq2_1.27.13.tar.gz
+on: [push, pull_request]
+jobs:
+  install1:
+    container: vjcitn/deseq2_support:v2
+    name: install with log.txt
+    runs-on: ubuntu-latest
+    steps:
+    - name: improve
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y qpdf
+      continue-on-error: true
+    - name: install and log bioc package from bioc git  # 3.10 owing to :v8 above
+      run: |
+        Rscript -e "BiocManager::install(c('devtools', 'rmarkdown','${PACKAGE_NAME}'))" > install.log.txt
+        git clone https://git.bioconductor.org/packages/${PACKAGE_NAME}
+        cd ${PACKAGE_NAME}
+        Rscript -e "devtools::check()" > ../chk.log.txt 
+        cd ..
+        R CMD build ${PACKAGE_NAME}
+        #export TARBALL=`ls ${PACKAGE_NAME}_*.gz`  # NOT REALLY NEEDED AS YOU SUPPLY THIS INFO
+        #cp ${TARBALL} /home/runner/work/biocIBC/biocIBC/
+        cd /usr/local/lib/R/site-library/
+        export PLAT=`Rscript -e "cat(R.version\\$platform)" --quiet`
+        tar czvf ${PACKAGE_NAME}_${PLAT}_${VERSION_TAG}.tgz ${PACKAGE_NAME}
+        cp ${PACKAGE_NAME}_${PLAT}_${VERSION_TAG}.tgz ${GITHUB_WORKSPACE}
+        cd ${GITHUB_WORKSPACE}
+      continue-on-error: true
+      id: install_log
+    - name: get install log
+      uses: actions/upload-artifact@master
+      with:
+        name: install_log
+        path: install.log.txt
+      continue-on-error: true
+    - name: get chk log
+      uses: actions/upload-artifact@master
+      with:
+        name: chk_log
+        path: chk.log.txt
+      continue-on-error: true 
+    - name: get tarball
+      uses: actions/upload-artifact@master
+      with:
+        name: tb
+        path: DESeq2_1.27.13.tar.gz  # does not seem to expand global env maps
+    - name: get_binary
+      uses: actions/upload-artifact@master
+      with:
+        name: binary_pkg
+        path: DESeq2_x86_64-pc-linux-gnu_1.27.13.tgz # should indicate platform
