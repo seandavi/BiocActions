@@ -12,7 +12,7 @@ Artifacts are produced including logs for install and check, and a tarball of th
 
 **Required** Must provide R runtime.  Default: bioconductor/bioconductor_full:devel
 
-### ystbsll
+### tarball
 
 **Required** Until better introspection is available, `[pkgname]_[version tag].tar.gz` must be supplied; default, which may become stale if it does not agree with the checked out source.  Default: ROC_1.63.0.tar.gz
 
