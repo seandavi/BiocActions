@@ -1,0 +1,19 @@
+# action.yml for biocIBC repo
+name: 'biocIBC'
+description: 'create artifacts on installation, build, and check of a selected Bioconductor package'
+inputs:
+  pkgname:  # id of input
+    description: 'name of a package'
+    required: true
+    default: 'ROC'
+  container:
+    description: 'container sufficient for installation and build'
+    required: true
+    default: bioconductor/bioconductor_full:devel  # must have R appropriate for TARBALL
+  tarball: # name of tarball produced
+    description: 'full .tar.gz with version tag'
+    required: true
+    default: 'ROC_1.63.0.tar.gz'
+
+runs:
+  using: 'ubuntu-latest'
